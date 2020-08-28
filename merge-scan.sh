@@ -85,13 +85,16 @@ while true; do
 	# Execute scan
 	scanimage \
 		--device-name="$SCANNER" \
-		--compression=JPEG \
-		--jpeg-quality=0 \
+	#	--compression=JPEG \
+	#	--jpeg-quality=0 \
+		--progress
 		--resolution=600 \
-		--format=tiff \
-	| convert \
-		-rotate 270 \
-		tiff:- $FOLDER/$(date +%s).jpg
+		--format=pnm \
+		--mode=color \
+		> $FOLDER/$(date +%s).pmm 
+	#| convert \
+	#	-rotate 270 \
+	#	tiff:- $FOLDER/$(date +%s).jpg
 	
 	# Scan failed
 	if [ $? = 1 ]; then
