@@ -93,7 +93,7 @@ while true; do
 		--device-name="$SCANNER" \
 	#	--compression=JPEG \
 	#	--jpeg-quality=0 \
-		--progress
+		--progress \
 		--resolution=600 \
 		--format=pnm \
 		--mode=color \
