@@ -40,10 +40,8 @@ echo "Finding scanner... "
 SCANIMAGE=$(scanimage -L)
 SCANNER=$(echo ${SCANIMAGE:8} | grep -oP ".*(?=')")
 echo "Set scanner to $SCANNER"
-## Scan area in mm
-X_SIZE="100"
-Y_SIZE="150"
-echo "Scanning $X_SIZE x $Y_SIZE mm photos"
+
+
 #####################################################
 
 ###################### RUNTIME ######################
@@ -91,7 +89,6 @@ while true; do
 		--jpeg-quality=0 \
 		--resolution=600 \
 		--format=tiff \
-		-x $X_SIZE -y $Y_SIZE \
 	| convert \
 		-rotate 270 \
 		tiff:- $FOLDER/$(date +%s).jpg
