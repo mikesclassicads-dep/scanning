@@ -26,7 +26,7 @@
 ##                                                ###
 ##  requires: SANE scanimage, zenity              ###
 ##  `sudo apt-get install scanimage zenity`       ###
-##                                                ###
+##  GET RID OF ZENITY, USE BASH INSTEAD           ###
 ##  Keith Irwin 2016                              ###
 ##  (https://keithirwin.us/contact)               ###
 ##                                                ###
@@ -62,6 +62,15 @@ if [ ! -d "$FOLDER" ]; then
 
 # Try try again
 fi
+
+#while true; do
+#   read -p "Do you wish to install this program?" yn
+#    case $yn in
+#        [Yy]* ) make install; break;;
+#        [Nn]* ) exit;;
+#        * ) echo "Please answer yes or no.";;
+#    esac
+#done
 
 # Wait for first photo to be placed
 zenity --question \
