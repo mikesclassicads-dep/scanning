@@ -1,133 +1,24 @@
-#script to scan images
-#set variables
-#$DPI=
-#$FOURDIGITOUTNUMBER
-#$OUTPUTNAME
-#add "read" command to set image prefix and suffix
-#add "read" command to set dpi
-#add "wait" or "sleep" command before setting a key press that will go ahead with next scan
-#this command works as expected
-#scanimage --format=pnm --mode=color --progress --resolution=100 > set1-tsep19470412-test.ppm
-#is command I would likely use
+0#!/bin/bash
+read -p 'What format do you want to use? Select png, jpg, pnm, ppm, tiff ' format
+read -p 'What do you want the filename prefix to be? ' prefix
+read -p 'Pick a dpi/ppi resolution ' resolution
+#command
 #scanimage --format=pnm --mode=color --progress --resolution=600 > set2-tsep19470412-XXXX.ppm
-
-
-#!/bin/bash
-####################################################\
-##                                                ###
-##  scanpix.sh                                    ###
-##  v 1.1.1                                       ###
-##  Photo scanning script                         ###
-##                                                ###
-##  Scans a photo, alerts the user when           ###
-##  finished, and quits or scans another.         ###
-##  Useful for bulk scanning photos while         ###
-##  Doing other computer work.                    ###
-##                                                ###
-##  requires: SANE scanimage, zenity              ###
-##  `sudo apt-get install scanimage zenity`       ###
-##  GET RID OF ZENITY, USE BASH INSTEAD           ###
-##  Keith Irwin 2016                              ###
-##  (https://keithirwin.us/contact)               ###
-##                                                ###
-#####################################################
-#####################################################
-
-################# SET THESE VALUES ##################
-## Find and parse scanner name
-echo "Finding scanner... "
-SCANIMAGE=$(scanimage -L)
-SCANNER=$(echo ${SCANIMAGE:8} | grep -oP ".*(?=')")
-echo "Set scanner to $SCANNER"
-#####################################################
-
-###################### RUNTIME ######################
-
-# Ask user for a folder to scan into
-FOLDER=$(zenity --entry \
-      	--title="Scan location" \
-	--text="Scan photos to (no trailing slash): " \
-	--entry-text="$HOME/Desktop/scan")
-
-# User didn't enter a folder
-if [ ! -d "$FOLDER" ]; then
-
-	# That's not a directory! 
-	zenity --error \
-		--title="Error: Scan location not found" \
-		--text="Couldn't find $FOLDER.  Try again (no trailing slashes)"
-
-	# Give up
-	exit 1
-
-# Try try again
-fi
-
-#while true; do
-#   read -p "Do you wish to install this program?" yn
-#    case $yn in
-#        [Yy]* ) make install; break;;
-#        [Nn]* ) exit;;
-#        * ) echo "Please answer yes or no.";;
-#    esac
-#done
-
-# Wait for first photo to be placed
-zenity --question \
-	--title="Prepare scan" \
-	--text="Place the first photo on the scanner and click OK" \
-	--ok-label="OK" \
-  --cancel-label="Quit"                                       │
-
-# Quit
-if [ ! $? = 0 ]; then
-	exit 0
-fi 
-
-
-# Repeat scan until user cancels or quits
-while true; do
-
-	# Execute scan
-	scanimage \
-		--device-name="$SCANNER" \
-	#	--compression=JPEG \
-	#	--jpeg-quality=0 \
-		--progress \
-		--resolution=600 \
-		--format=pnm \
-		--mode=color \
-		> $FOLDER/$(date +%s).pmm 
-	#| convert \
-	#	-rotate 270 \
-	#	tiff:- $FOLDER/$(date +%s).jpg
-	
-	# Scan failed
-	if [ $? = 1 ]; then
-		zenity --question \
-			--title="Scan Failed" \
-			--text="That photo didn't scan!  What do you want to do? " \
-			--ok-label="Try again" \
-			--cancel-label="Give up"
-		if [ ! $? = 0 ]; then
-			# Give up
-			exit 1
-		fi
-
-	# Scan succeeded
-	else
-
-		# Scan again?
-		zenity --question \
-			--title="Scan Completed" \
-			--text="Photo was saved in $FOLDER\nNow what? " \
-			--ok-label="Scan another" \
-			--cancel-label="Quit"
-		
-		# No			
-		if [ ! $? = 0 ]; then
-			exit 0
-		fi
-	fi
-	
-done;
+scanimage --format=$format --mode=color --progress --resolution=$resolution > $prefix-$resolutiondpi-$(date +%s).$format
+echo "Do you want to scan another page?"
+#bash is drawing all over itself so lets see if 'wait' will stop that
+wait 3
+while true;
+do
+#do I put a "for loop" here if I want to increment the output name?
+    read -r -p "Yes or no? " response   
+    if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
+    then
+       #scanimage --format=$format --mode=color --progress --resolution=$resolution > $prefix-$(date +%s).$format
+	scanimage --format=$format --mode=color --progress --resolution=$resolution > $prefix-$resolutiondpi-$(date +%s).$format
+       #bash draws on itself when the 'true' statement loops, see if 'wait' will fix 
+        wait 3
+    else
+        exit 0
+    fi
+done
