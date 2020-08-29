@@ -6,8 +6,8 @@ read -p 'Pick a dpi/ppi resolution ' resolution
 #scanimage --format=pnm --mode=color --progress --resolution=600 > set2-tsep19470412-XXXX.ppm
 scanimage --format=$format --mode=color --progress --resolution=$resolution > $prefix-$resolutiondpi-$(date +%s).$format
 echo "Do you want to scan another page?"
-#bash is drawing all over itself so lets see if 'wait' will stop that
-wait 1
+#bash is drawing all over itself so lets see if 'sleep' will stop that
+sleep 1
 while true;
 do
 #do I put a "for loop" here if I want to increment the output name?
@@ -17,7 +17,7 @@ do
        #scanimage --format=$format --mode=color --progress --resolution=$resolution > $prefix-$(date +%s).$format
 	scanimage --format=$format --mode=color --progress --resolution=$resolution > $prefix-$resolutiondpi-$(date +%s).$format
        #bash draws on itself when the 'true' statement loops, see if 'wait' will fix 
-        wait 1
+        sleep 1
     else
         exit 0
     fi
