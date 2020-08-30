@@ -15,7 +15,7 @@ do
     if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
     then
        #scanimage --format=$format --mode=color --progress --resolution=$resolution > $prefix-$(date +%s).$format
-	scanimage --format=$format --mode=color --progress --resolution=$resolution > $prefix-$resolutiondpi-$(date +%s).$format
+	scanimage --format=$format --mode=color --progress --resolution=$resolution > $prefix-"$resolution"dpi-$(date +%s).$format
        #bash draws on itself when the 'true' statement loops, see if 'wait' will fix 
         sleep 1
     else
